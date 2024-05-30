@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -170,35 +171,47 @@ public class Wrapper {
         System.out.println("sum of number of likes are: "+totalSum);
     }
 
-    // public static void countSumofViews(String value)
-    // {
-    //     int totalCount=0;
-    //     int viewCount=0;
-    //     driver.findElement(By.xpath("//input[@name='search_query']")).sendKeys(value);
-      
-    //     List<WebElement> rawCountList=driver.findElements(By.xpath("//div[@class='text-wrapper style-scope ytd-video-renderer']/div/ytd-video-meta-block/div/div[2]/span[1]"));
+    public static void countSumofViews(String value)
+    {
+        Double totalCount=(double) 0;
+        long viewCount= 0;
+       WebElement SearchEle= driver.findElement(By.xpath("//input[@name='search_query']"));
+       SearchEle.sendKeys(value);
+       SearchEle.sendKeys(Keys.ENTER);
+
+       WebDriverWait w= new WebDriverWait(driver, Duration.ofSeconds(10));
+       w.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='metadata-line']/span[1]")));
         
-    //         for(WebElement e: rawCountList)
-    //         {
-    //             String rawCount=e.getText();
-    //             String [] str= rawCount.split(" ");
-    //             if(str[0].endsWith("K"))
-    //             {
-    //                 viewCount= (int) (Double.parseDouble(str[0].replace("K", ""))*1000);
-    //             }
-    //             else if(str[0].endsWith("M"))
-    //             {
-    //                 viewCount= (int) (Double.parseDouble(str[0].replace("K", ""))*100000);
-    //             }
-    //             totalCount= totalCount+viewCount;
-    //             if(totalCount>10000000)
-    //             {
-    //                 System.out.println("Views has reached 1 CR.");
-    //                 break;
-    //             }
-    //         }
+        List<WebElement> rawCountList=driver.findElements(By.xpath("//div[@id='metadata-line']/span[1]"));
         
-    // }
+            for(WebElement e: rawCountList)
+            {
+                String rawCount=e.getText();
+                //String [] str= rawCount.split(" ");
+                String views=rawCount.replaceAll(" views", "");
+                views=views.replaceAll(",", "");
+                views.trim();
+                if(views.endsWith("K"))
+                {
+                    views = views.replace("K", "");
+                    viewCount= (long) (Double.parseDouble(views)*1000);
+                }
+                else if(views.endsWith("M"))
+                {
+                    views= views.replace("M", "");
+                    viewCount= (long) (Double.parseDouble(views.replace("M", ""))*100000);
+                }
+                totalCount= totalCount+viewCount;
+                
+                if(totalCount>10000000)
+                {
+                    System.out.println("Views has reached 1 CR.");
+                    System.out.println(totalCount); 
+                    break;
+                }
+            }
+               
+    }
 
 
 

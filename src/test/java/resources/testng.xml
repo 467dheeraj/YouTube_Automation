@@ -8,6 +8,7 @@
                 <include name = "testCase02"> </include>
                 <include name = "testCase03"> </include>
                 <include name = "testCase04"> </include>
+                <include name = "testCase05"> </include>
             </methods>
         </classes>
     </test>

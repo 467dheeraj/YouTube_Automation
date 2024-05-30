@@ -8,7 +8,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.AfterTest;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
@@ -20,7 +23,7 @@ public class TestCases extends Wrapper{
         super();
     }
 
-    @AfterTest
+    @AfterSuite
     public void endTest()
     {
         System.out.println("End Test: TestCases");
@@ -49,7 +52,7 @@ public class TestCases extends Wrapper{
         System.out.println("end Test case: testCase01");
     }
 
-    @Test
+    @Test(priority = 1, description = "Go to the 'Films' tab and in the 'Top Selling' section, scroll to the extreme right. Apply a Soft Assert on whether the movie is marked 'A' for Mature or not. Apply a Soft assert on whether the movie is either 'Comedy' or 'Animation'.")
     public void testCase02() throws InterruptedException
     {
         System.out.println("Start Test case: testCase02");
@@ -76,7 +79,7 @@ public class TestCases extends Wrapper{
         System.out.println("end Test case: testCase02");
     }
 
-    @Test
+    @Test(priority = 3, description = "Go to the 'Music' tab and in the 1st section, scroll to the extreme right. Print the name of the playlist. Soft Assert on whether the number of tracks listed is less than or equal to 50.")
     public void testCase03() throws InterruptedException
     {
         System.out.println("Start Test case: testCase03");
@@ -105,7 +108,7 @@ public class TestCases extends Wrapper{
         System.out.println("end Test case: testCase03");
     }
 
-    @Test
+    @Test(priority = 4, description = "Go to 'News' tab and print the title and body of the 1st 3 'Latest News Posts' along with the sum of number of likes on all 3 of them. No likes given means 0.")
     public void testCase04() throws InterruptedException
     {
         System.out.println("Start Test case: testCase04");
@@ -120,6 +123,23 @@ public class TestCases extends Wrapper{
 
         System.out.println("end Test case: testCase04");
     }
+
+    @Test(dataProvider = "excelData" , priority=5, description ="scrolling till the sum of each videos views reach 10 Cr.")
+    public void testCase05(String toBeSearched) throws InterruptedException
+    {
+        System.out.println("Start Test case: testCase05");
+        Wrapper.goTo();
+        Wrapper.countSumofViews(toBeSearched);
+    }
+
+    @DataProvider(name = "excelData")
+    public String[][] excelDataProvider() throws IOException {
+        return ReadFroExcel.getData();
+    }
+
+    
+
+    
 
 
 }
